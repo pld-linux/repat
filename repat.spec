@@ -11,6 +11,7 @@ Patch0:		%{name}-redland.patch
 URL:		http://injektilo.org/rdf/repat.html
 BuildRequires:	expat-devel >= 1.95.0
 BuildRequires:	libtool
+BuildRequires:	unzip
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
