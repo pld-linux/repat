@@ -27,7 +27,7 @@ nadawaæ siê do u¿ytku w wiêkszo¶ci ¶rodowisk.
 Summary:	Header file for repat library
 Summary(pl):	Plik nag³ówkowy biblioteki repat
 Group:		Development/Libraries
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{version}-%{release}
 Requires:	expat-devel >= 1.95.0
 
 %description devel
@@ -40,7 +40,7 @@ Plik nag³ówkowy biblioteki repat.
 Summary:	repat static library
 Summary(pl):	Statyczna biblioteka repat
 Group:		Development/Libraries
-Requires:	%{name}-devel = %{version}
+Requires:	%{name}-devel = %{version}-%{release}
 
 %description static
 repat static library.
