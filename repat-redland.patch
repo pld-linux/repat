@@ -1,0 +1,304 @@
+diff -Nur repat/rdfdump.c repat-redland/rdfdump.c
+--- repat/rdfdump.c	2000-12-23 22:02:07.000000000 +0100
++++ repat-redland/rdfdump.c	2002-04-23 13:09:27.000000000 +0200
+@@ -74,6 +74,7 @@
+ 
+ #include <stdio.h>
+ #include <string.h>
++#include <limits.h>
+ 
+ #ifdef WIN32
+ #ifdef _DEBUG
+@@ -132,7 +133,7 @@
+ 	 char** argv )
+ {
+ 	FILE* input;
+-	char base[ _MAX_PATH ];
++	char base[ PATH_MAX ];
+ 
+ 	char buf[ BUFSIZ ];
+ 	int done;
+@@ -277,8 +278,6 @@
+ my_start_parse_type_literal_handler(
+ 	void* user_data )
+ {
+-	user_data;
+-
+ 	printf( "start parse type literal" );
+ }
+ 
+@@ -286,8 +285,6 @@
+ my_end_parse_type_literal_handler(
+ 	void* user_data )
+ {
+-	user_data;
+-
+ 	printf( "end parse type literal" );
+ }
+ 
+@@ -297,9 +294,6 @@
+ 	const XML_Char* name, 
+ 	const XML_Char** attributes )
+ {
+-	user_data;
+-	attributes;
+-
+ 	printf( "start element: %s\n", name );
+ }
+ 
+@@ -308,8 +302,6 @@
+ 	void* user_data, 
+ 	const XML_Char* name )
+ {
+-	user_data;
+-
+ 	printf( "end element: %s\n", name );
+ }
+ 
+@@ -321,8 +313,6 @@
+ {
+ 	int i;
+ 
+-	user_data;
+-
+ 	printf( "characters: " );
+ 
+ 	for( i = 0; i < len; ++i )
+@@ -351,7 +341,5 @@
+ 	void* user_data,
+ 	const XML_Char* warning )
+ {
+-	user_data;
+-
+ 	printf( "**** WARNING **** : %s", warning );
+ }
+diff -Nur repat/rdfparse.c repat-redland/rdfparse.c
+--- repat/rdfparse.c	2000-12-25 02:41:34.000000000 +0100
++++ repat-redland/rdfparse.c	2002-04-23 13:06:22.000000000 +0200
+@@ -166,7 +166,7 @@
+ /* internal prototypes */
+ 
+     static _rdf_element* 
+-new_element();
++new_element(void);
+ 
+     static void 
+ copy_element( 
+@@ -354,7 +354,7 @@
+ /* internal functions */
+ 
+     _rdf_element* 
+-new_element()
++new_element(void)
+ {
+     _rdf_element* e = calloc( 1, sizeof( _rdf_element ) );
+     return e;
+@@ -751,16 +751,16 @@
+ 				{
+ 					/* remove all occurrences of "./" */
+ 
+-					XML_Char* p = path_buffer;
++					XML_Char* p2 = path_buffer;
+ 					XML_Char* s = path_buffer;
+ 
+ 					while( *s != 0 )
+ 					{
+ 						if( *s == T( '/' ) || *s == T( '\\' ) )
+ 						{
+-							if( p == ( s - 1 ) && *p == T( '.' ) )
++							if( p2 == ( s - 1 ) && *p2 == T( '.' ) )
+ 							{
+-								XML_Char* d = p;
++								XML_Char* d = p2;
+ 
+ 								++s;
+ 
+@@ -770,11 +770,11 @@
+ 								}
+ 
+ 								*d = 0;
+-								s = p;
++								s = p2;
+ 							}
+ 							else
+ 							{
+-								p = s + 1;
++								p2 = s + 1;
+ 							}
+ 						}
+ 
+@@ -793,7 +793,7 @@
+ 					/* remove all occurrences of "<segment>/../" */
+ 
+ 					XML_Char* s = path_buffer;
+-					XML_Char* p = NULL;
++					XML_Char* p3 = NULL;
+ 					XML_Char* p2 = NULL;
+ 					XML_Char* p0 = NULL;
+ 
+@@ -801,9 +801,9 @@
+ 					{
+ 						if( *s != T( '/' ) && *s != T( '\\' ) )
+ 						{
+-							if( p == NULL )
++							if( p3 == NULL )
+ 							{
+-								p = s;
++								p3 = s;
+ 							}
+ 							else if( p2 == NULL )
+ 							{
+@@ -812,17 +812,17 @@
+ 						}
+ 						else
+ 						{
+-							if( p != NULL && p2 != NULL )
++							if( p3 != NULL && p2 != NULL )
+ 							{
+ 								if( p2 == ( s - 2 )
+ 									&& *p2 == T( '.' )
+ 									&& *( p2 + 1 ) == T( '.' ) )
+ 								{
+ 
+-									if( *p != T( '.' )
+-										&& *( p + 1 ) != T( '.' ) )
++									if( *p3 != T( '.' )
++										&& *( p3 + 1 ) != T( '.' ) )
+ 									{
+-										XML_Char* d = p;
++										XML_Char* d = p3;
+ 
+ 										++s;
+ 
+@@ -833,17 +833,17 @@
+ 
+ 										*d = 0;
+ 
+-										if( p0 < p )
++										if( p0 < p3 )
+ 										{
+-											s = p - 1;
++											s = p3 - 1;
+ 
+-											p = p0;
++											p3 = p0;
+ 											p2 = NULL;
+ 										}
+ 										else
+ 										{
+ 											s = path_buffer;
+-											p = NULL;
++											p3 = NULL;
+ 											p2 = NULL;
+ 											p0 = NULL;
+ 										}
+@@ -851,8 +851,8 @@
+ 								}
+ 								else
+ 								{
+-									p0 = p;
+-									p = p2;
++									p0 = p3;
++									p3 = p2;
+ 									p2 = NULL;
+ 								}
+ 							}
+@@ -867,9 +867,9 @@
+ 						&& *p2 == T( '.' )
+ 						&& *( p2 + 1 ) == T( '.' ) )
+ 					{
+-						if( p != NULL )
++						if( p3 != NULL )
+ 						{
+-							*p = 0;
++							*p3 = 0;
+ 						}
+ 					}
+ 				}
+@@ -1621,7 +1621,8 @@
+         rdf_parser->top->ordinal = ++rdf_parser->top->parent->members;
+ 
+         ordinal[ 0 ] = T( '_' );
+-        itoa( rdf_parser->top->ordinal, &ordinal[ 1 ], 10 );
++        /* itoa( rdf_parser->top->ordinal, &ordinal[ 1 ], 10 ); */
++        sprintf(&ordinal[1], "%d", rdf_parser->top->ordinal);
+ 
+         tcscat( buffer, ordinal );
+     }
+diff -Nur repat/rdfparse.h repat-redland/rdfparse.h
+--- repat/rdfparse.h	2000-12-23 20:20:50.000000000 +0100
++++ repat-redland/rdfparse.h	2001-01-04 16:06:02.000000000 +0100
+@@ -79,6 +79,8 @@
+ #include "expat.h"
+ #endif
+ 
++#include <sys/types.h>
++
+ #ifndef RDFPARSEAPI
+ #define RDFPARSEAPI /* as nothing */
+ #endif
+diff -Nur repat/rdftest.c repat-redland/rdftest.c
+--- repat/rdftest.c	2000-12-25 02:48:16.000000000 +0100
++++ repat-redland/rdftest.c	2001-01-04 16:04:17.000000000 +0100
+@@ -2,6 +2,7 @@
+ 
+ #include <stdio.h>
+ #include <string.h>
++#include <limits.h>
+ 
+ #ifdef WIN32
+ #ifdef _DEBUG
+@@ -83,36 +84,14 @@
+ 
+ /* test macros and data */
+ 
+-#define TEST_BEGIN( id, filename ) \
+-void* id[] = \
+-{ \
+-	filename,
+-
+-#define TEST_STATEMENT( \
+-	subject_type, \
+-	subject, \
+-	predicate, \
+-	ordinal, \
+-	object_type, \
+-	object, \
+-	xml_lang ) \
+-\
+-	"statement", \
+-	( void* )subject_type, \
+-	subject, \
+-	predicate, \
+-	( void* )ordinal, \
+-	( void* )object_type, \
+-	object, \
+-	xml_lang,
+-
+-#define TEST_WARNING \
+-	"warning", \
+-
+-
+-#define TEST_END \
+-	"end" \
+-};
++#define TEST_BEGIN( id, filename ) void* id[] = { filename,
++
++#define TEST_STATEMENT(subject_type, subject, predicate, ordinal, object_type, object, xml_lang ) "statement", ( void* )subject_type, subject, predicate, ( void* )ordinal, ( void* )object_type, object, xml_lang,
++
++#define TEST_WARNING "warning",
++
++
++#define TEST_END "end" };
+ 
+ #include "rdftests.i"
+ 
+@@ -252,7 +231,7 @@
+ 	void**  data )
+ {
+ 	FILE* input;
+-	char base[ _MAX_PATH ];
++	char base[ PATH_MAX ];
+ 
+ 	char buf[ BUFSIZ ];
+ 	int done;
