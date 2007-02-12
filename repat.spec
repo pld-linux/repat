@@ -1,5 +1,5 @@
 Summary:	The RDF Parser Toolkit
-Summary(pl.UTF-8):   Narzędzia do analizy RDF
+Summary(pl.UTF-8):	Narzędzia do analizy RDF
 Name:		repat
 Version:	20001224
 Release:	1
@@ -26,7 +26,7 @@ nadawać się do użytku w większości środowisk.
 
 %package devel
 Summary:	Header file for repat library
-Summary(pl.UTF-8):   Plik nagłówkowy biblioteki repat
+Summary(pl.UTF-8):	Plik nagłówkowy biblioteki repat
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 Requires:	expat-devel >= 1.95.0
@@ -39,7 +39,7 @@ Plik nagłówkowy biblioteki repat.
 
 %package static
 Summary:	repat static library
-Summary(pl.UTF-8):   Statyczna biblioteka repat
+Summary(pl.UTF-8):	Statyczna biblioteka repat
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
