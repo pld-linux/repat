@@ -1,5 +1,5 @@
 Summary:	The RDF Parser Toolkit
-Summary(pl):	NarzÍdzia do analizy RDF
+Summary(pl.UTF-8):   Narzƒôdzia do analizy RDF
 Name:		repat
 Version:	20001224
 Release:	1
@@ -19,14 +19,14 @@ repat is a callback-based RDF parser built on James Clark's expat.
 It's implemented in Standard C and should be usable in most
 environments.
 
-%description -l pl
+%description -l pl.UTF-8
 repat to oparty na callbackach analizator RDF zbudowany w oparciu o
 expat Jamesa Clarka. Jest zaimplementowany w standardowym C i powinien
-nadawaÊ siÍ do uøytku w wiÍkszo∂ci ∂rodowisk.
+nadawaƒá siƒô do u≈ºytku w wiƒôkszo≈õci ≈õrodowisk.
 
 %package devel
 Summary:	Header file for repat library
-Summary(pl):	Plik nag≥Ûwkowy biblioteki repat
+Summary(pl.UTF-8):   Plik nag≈Ç√≥wkowy biblioteki repat
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 Requires:	expat-devel >= 1.95.0
@@ -34,19 +34,19 @@ Requires:	expat-devel >= 1.95.0
 %description devel
 Header file for repat library.
 
-%description devel -l pl
-Plik nag≥Ûwkowy biblioteki repat.
+%description devel -l pl.UTF-8
+Plik nag≈Ç√≥wkowy biblioteki repat.
 
 %package static
 Summary:	repat static library
-Summary(pl):	Statyczna biblioteka repat
+Summary(pl.UTF-8):   Statyczna biblioteka repat
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
 %description static
 repat static library.
 
-%description static -l pl
+%description static -l pl.UTF-8
 Statyczna biblioteka repat.
 
 %prep
