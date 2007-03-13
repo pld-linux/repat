@@ -5,8 +5,8 @@ Version:	20001224
 Release:	1
 License:	LGPL or MPL
 Group:		Libraries
-# Source0-md5:	58a36eeb50adbdefa41639745dc1e8b3
 Source0:	http://injektilo.org/rdf/%{name}.2000-12-24.zip
+# Source0-md5:	58a36eeb50adbdefa41639745dc1e8b3
 Patch0:		%{name}-redland.patch
 URL:		http://injektilo.org/rdf/repat.html
 BuildRequires:	expat-devel >= 1.95.0
